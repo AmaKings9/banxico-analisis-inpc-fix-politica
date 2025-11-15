@@ -34,10 +34,11 @@ def extraer_datos(series_id, start_date=None, end_date=None, token=TOKEN):
     r.raise_for_status()
     print(r)
     '''
-
+    # Cargar archivo .json, resultado de la extraccion manual
     with open(series_id) as f:
         data = json.load(f)
 
+    # Almacenar las fechas y valores de la serie de tiempo en un dataframe
     datos = data['bmx']['series'][0]['datos']
     df = pd.DataFrame(datos)
     df = df.rename(columns={'fecha':'fecha','dato':'valor'})
@@ -52,6 +53,7 @@ if __name__ == "__main__":
         "tasa_obj": "data_raw/tasa_objetivo_muestra.json"
     }
     
+    # Llamar a la funcion de extraccion y almacenar el df resultante en csv
     for name, serie in series.items():
         df_s = extraer_datos(serie, start_date="2018-01-01")
         df_s.to_csv(f"data_raw/{name}.csv", index=False)
